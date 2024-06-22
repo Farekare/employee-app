@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Farekare.github.io/static/css/main.0751c14b.css",
+    "main.js": "/Farekare.github.io/static/js/main.4cd7fa32.js",
+    "index.html": "/Farekare.github.io/index.html",
+    "main.0751c14b.css.map": "/Farekare.github.io/static/css/main.0751c14b.css.map",
+    "main.4cd7fa32.js.map": "/Farekare.github.io/static/js/main.4cd7fa32.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0751c14b.css",
+    "static/js/main.4cd7fa32.js"
+  ]
+}
