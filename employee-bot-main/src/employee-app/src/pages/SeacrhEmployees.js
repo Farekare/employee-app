@@ -36,7 +36,7 @@ function SearchEmployees() {
     };
     console.log(employee);
     try {
-      const response = await axios.post('http://localhost:4000/api/search-employees', employee);
+      const response = await axios.post(process.env.API_URL, employee);
 
       console.log('Employees found:', response.data);
 

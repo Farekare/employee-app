@@ -7,7 +7,6 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from handlers.message_handlers import message_router
 from handlers.web_app_data_handlers import web_app_data_router
-from server.api import app
 load_dotenv()
 
 # main dispatcher

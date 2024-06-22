@@ -6,8 +6,15 @@ const PORT = 4000;
 const mongoose = require('mongoose')
 const User = require('./model')
 // Для обработки JSON в запросах
+
+const corsOptions = {
+  origin: 'https://farekare.github.io',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 
 // Маршрут для добавления сотрудника
@@ -63,7 +70,7 @@ app.delete('/api/employees/:id', async (req, res) =>
 )
     
 
-mongoose.connect(process.env.DB_URI).then(()=>console.log('Connected to mongo')).catch(()=>console.log('Mongo connection error'))
+mongoose.connect("mongodb+srv://admin:VSNydI7Fm3GthN3d@jarvel.9dzcywn.mongodb.net/?retryWrites=true&w=majority").then(()=>console.log('Connected to mongo')).catch(()=>console.log('Mongo connection error'))
     // Запуск сервера
     app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
