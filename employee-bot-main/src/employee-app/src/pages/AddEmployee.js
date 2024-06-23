@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import './AddEmployee.css'; // Добавим отдельный CSS файл для стилей компонента
-import axios from 'axios'
+import './AddEmployee.css'; // Add a separate CSS file for component styles
+import axios from 'axios';
+
 function AddEmployee() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -12,11 +13,9 @@ function AddEmployee() {
     if (e.key === ' ' && tagInput.trim() !== '') {
       e.preventDefault();
       let newTag = tagInput.trim();
-      // Автоматическое добавление знака #, если не введен
       if (!newTag.startsWith('#')) {
         newTag = `#${newTag}`;
       }
-      // Проверка на существование тега
       if (!tags.includes(newTag)) {
         setTags([...tags, newTag]);
       }
@@ -38,16 +37,18 @@ function AddEmployee() {
     };
     console.log(employee);
     try {
-      const response = await axios.post("https://solid-bull-quickly.ngrok-free.app/api/employees", employee);
+      const response = await axios.post('https://solid-bull-quickly.ngrok-free.app/api/employees', employee);
       console.log('Employee Added:', response.data);
 
-      // Очистка формы после успешного добавления
       setName('');
       setEmail('');
       setTags([]);
       setNotes('');
     } catch (error) {
-      console.error('Errror adding employee:', error);
+      console.error('Error adding employee:', error);
+      if (error.response) {
+        console.error('Server responded with:', error.response.data);
+      }
     }
   };
 

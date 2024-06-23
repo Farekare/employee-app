@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 
 // Route for adding an employee
 app.post('/api/employees', async (req, res) => {
+  console.log('POST /api/employees received:', req.body);
   const { name, email, tags, notes } = req.body;
 
   const newEmployee = { name, email, tags, notes };
@@ -29,7 +30,7 @@ app.post('/api/employees', async (req, res) => {
     res.status(201).send(employee);
     console.log('New Employee added:', newEmployee);
   } catch (e) {
-    console.error(e);
+    console.error('Error saving employee:', e);
     res.status(500).send({ error: 'Error adding employee' });
   }
 });
@@ -37,12 +38,12 @@ app.post('/api/employees', async (req, res) => {
 // Route for searching employees by tags
 app.post('/api/search-employees', async (req, res) => {
   const { tags } = req.body;
-  console.log(tags);
+  console.log('POST /api/search-employees received:', tags);
   try {
     const users = await User.find({ tags: { $in: tags } });
     res.status(200).send(users);
   } catch (e) {
-    console.error(e);
+    console.error('Error searching employees:', e);
     res.status(500).send({ error: 'Error searching employees' });
   }
 });
@@ -56,7 +57,7 @@ app.put('/api/employees/:id', async (req, res) => {
     await User.updateOne({ _id: id }, updatedEmployee);
     res.json({ message: 'Employee updated' });
   } catch (e) {
-    console.error(e);
+    console.error('Error updating employee:', e);
     res.status(500).send({ error: 'Error updating employee' });
   }
 });
@@ -64,13 +65,13 @@ app.put('/api/employees/:id', async (req, res) => {
 // Route for deleting an employee
 app.delete('/api/employees/:id', async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+  console.log('DELETE /api/employees/:id received:', id);
 
   try {
     await User.deleteOne({ _id: id });
     res.json({ message: 'Employee deleted' });
   } catch (e) {
-    console.error(e);
+    console.error('Error deleting employee:', e);
     res.status(500).send({ error: 'Error deleting employee' });
   }
 });
