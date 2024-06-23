@@ -47,7 +47,7 @@ function AddEmployee() {
       setTags([]);
       setNotes('');
     } catch (error) {
-      console.error('Error adding employee:', error);
+      console.error('Errror adding employee:', error);
     }
   };
 
