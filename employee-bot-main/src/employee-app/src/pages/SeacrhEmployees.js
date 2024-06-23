@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
-import './AddEmployee.css'; // Добавим отдельный CSS файл для стилей компонента
+import './AddEmployee.css'; // Import separate CSS file for component styles
 import axios from 'axios';
-import EmployeeModal from './EmployeeModal'; // Импортируем модальное окно
+import EmployeeModal from './EmployeeModal'; // Import modal window component
 
 function SearchEmployees() {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
-  const [employees, setEmployees] = useState([]); // Состояние для хранения найденных сотрудников
-  const [editingEmployee, setEditingEmployee] = useState(null); // Состояние для отслеживания редактируемого сотрудника
+  const [employees, setEmployees] = useState([]); // State to store found employees
+  const [editingEmployee, setEditingEmployee] = useState(null); // State to track the employee being edited
 
+  // Function to handle tag input and add tags to state
   const handleTagKeyDown = (e) => {
     if (e.key === 'Enter' && tagInput.trim() !== '') {
       e.preventDefault();
       let newTag = tagInput.trim();
-      // Автоматическое добавление знака #, если не введен
+      // Automatically add '#' if not entered
       if (!newTag.startsWith('#')) {
         newTag = `#${newTag}`;
       }
-      // Проверка на существование тега
+      // Check for existing tag
       if (!tags.includes(newTag)) {
         setTags([...tags, newTag]);
       }
@@ -25,10 +26,12 @@ function SearchEmployees() {
     }
   };
 
+  // Function to remove tags from state
   const removeTag = (indexToRemove) => {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
+  // Function to handle form submission and search for employees
   const handleSubmit = async (event) => {
     event.preventDefault();
     const employee = {
@@ -37,23 +40,24 @@ function SearchEmployees() {
     console.log(employee);
     try {
       const response = await axios.post("https://solid-bull-quickly.ngrok-free.app/api/search-employees", employee);
-
       console.log('Employees found:', response.data);
 
-      // Сохранение найденных сотрудников в состоянии
+      // Save found employees in state
       setEmployees(response.data);
 
-      // Очистка формы после успешного добавления
+      // Clear form after successful search
       setTags([]);
     } catch (error) {
       console.error('Error searching employees:', error);
     }
   };
 
+  // Function to handle click on employee card for editing
   const handleCardClick = (employee) => {
     setEditingEmployee(employee);
   };
 
+  // Function to handle changes in employee edit form
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditingEmployee((prevEmployee) => ({
@@ -62,6 +66,7 @@ function SearchEmployees() {
     }));
   };
 
+  // Function to handle saving edited employee details
   const handleSave = async () => {
     try {
       await axios.put(`http://localhost:4000/api/employees/${editingEmployee._id}`, editingEmployee);
@@ -74,6 +79,7 @@ function SearchEmployees() {
     }
   };
 
+  // Function to handle deleting an employee
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:4000/api/employees/${id}`);
@@ -84,6 +90,7 @@ function SearchEmployees() {
     }
   };
 
+  // Function to close the employee edit modal
   const handleCloseModal = () => {
     setEditingEmployee(null);
   };
@@ -132,6 +139,7 @@ function SearchEmployees() {
           <p>No employees found.</p>
         )}
       </div>
+      {/* Render EmployeeModal component for editing */}
       <EmployeeModal
         employee={editingEmployee}
         onClose={handleCloseModal}
