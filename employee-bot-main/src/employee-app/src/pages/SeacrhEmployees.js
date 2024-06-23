@@ -39,7 +39,7 @@ function SearchEmployees() {
     };
     console.log(employee);
     try {
-      const response = await axios.post("https://solid-bull-quickly.ngrok-free.app/api/search-employees", employee);
+      const response = await axios.post('https://solid-bull-quickly.ngrok-free.app/api/search-employees', employee);
       console.log('Employees found:', response.data);
 
       // Save found employees in state
