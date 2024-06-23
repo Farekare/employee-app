@@ -6,7 +6,9 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from handlers.message_handlers import message_router
+import ngrok
 from handlers.web_app_data_handlers import web_app_data_router
+
 load_dotenv()
 
 # main dispatcher
@@ -16,6 +18,7 @@ dp.include_router(web_app_data_router)
 TOKEN = getenv('BOT_TOKEN')
 
 async def main():
+    listener = await ngrok.forward(int(getenv('BACKEND_PORT')), authtoken=getenv('NGROK_AUTH_TOKEN'), domain=getenv('API_URL'))
     bot = Bot(token=TOKEN, parse_mode=ParseMode.HTML)
     await dp.start_polling(bot)
 
@@ -23,4 +26,3 @@ async def main():
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
-    
