@@ -36,7 +36,7 @@ function SearchEmployees() {
     };
     console.log(employee);
     try {
-      const response = await axios.post(process.env.API_URL, employee);
+      const response = await axios.post("https://solid-bull-quickly.ngrok-free.app", employee);
 
       console.log('Employees found:', response.data);
 
