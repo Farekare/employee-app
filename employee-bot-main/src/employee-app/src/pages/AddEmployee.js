@@ -38,7 +38,7 @@ function AddEmployee() {
     };
     console.log(employee);
     try {
-      const response = await axios.post("https://solid-bull-quickly.ngrok-free.app", employee);
+      const response = await axios.post("https://solid-bull-quickly.ngrok-free.app/api/employees", employee);
       console.log('Employee Added:', response.data);
 
       // Очистка формы после успешного добавления
