@@ -69,7 +69,7 @@ function SearchEmployees() {
   // Function to handle saving edited employee details
   const handleSave = async () => {
     try {
-      await axios.put(`http://solid-bull-quickly.ngrok-free.app/api/employees/${editingEmployee._id}`, editingEmployee);
+      await axios.put(`https://solid-bull-quickly.ngrok-free.app/api/employees/${editingEmployee._id}`, editingEmployee);
       setEmployees((prevEmployees) =>
         prevEmployees.map((emp) => (emp._id === editingEmployee._id ? editingEmployee : emp))
       );
@@ -82,7 +82,7 @@ function SearchEmployees() {
   // Function to handle deleting an employee
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://solid-bull-quickly.ngrok-free.app/api/employees/${id}`);
+      await axios.delete(`https://solid-bull-quickly.ngrok-free.app/api/employees/${id}`);
       setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp._id !== id));
       setEditingEmployee(null);
     } catch (error) {
