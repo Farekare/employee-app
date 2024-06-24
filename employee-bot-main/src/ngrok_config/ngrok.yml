@@ -1,3 +1,4 @@
+version: "3"
 authtoken: 2fTAQHvFMq417Or8sakV3wUmRlI_6CpCoyoLRnxc32crDsVA9
 tunnels:
   backend:
