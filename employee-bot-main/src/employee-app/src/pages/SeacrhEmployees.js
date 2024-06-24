@@ -11,7 +11,7 @@ function SearchEmployees() {
 
   // Function to handle tag input and add tags to state
   const handleTagKeyDown = (e) => {
-    if (e.key === 'Enter' && tagInput.trim() !== '') {
+    if (e.key === ' ' && tagInput.trim() !== '') {
       e.preventDefault();
       let newTag = tagInput.trim();
       // Automatically add '#' if not entered
@@ -114,7 +114,7 @@ function SearchEmployees() {
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleTagKeyDown}
-              placeholder="Press Enter to add a tag"
+              placeholder="Press Space to add a tag"
             />
           </div>
         </div>
