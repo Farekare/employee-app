@@ -77,7 +77,7 @@ app.delete('/api/employees/:id', async (req, res) => {
 });
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://admin:VSNydI7Fm3GthN3d@jarvel.9dzcywn.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb://mongo:27017/telegram_bot')
   .then(() => console.log('Connected to MongoDB'))
   .catch((e) => console.error('Mongo connection error:', e));
 
