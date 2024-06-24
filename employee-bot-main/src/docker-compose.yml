@@ -20,5 +20,11 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+  ngrok:
+    build: ./ngrok_config
+    depends_on:
+      - backend
+    ports:
+      - "4040:4040"
 volumes:
   mongo_data:

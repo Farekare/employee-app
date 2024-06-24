@@ -1,0 +1,6 @@
+authtoken: 2fTAQHvFMq417Or8sakV3wUmRlI_6CpCoyoLRnxc32crDsVA9
+tunnels:
+  backend:
+    proto: http
+    addr: backend:4000
+    domain: solid-bull-quickly.ngrok-free.app
