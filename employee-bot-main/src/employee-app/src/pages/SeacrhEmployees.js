@@ -8,7 +8,18 @@ function SearchEmployees() {
   const [tagInput, setTagInput] = useState('');
   const [employees, setEmployees] = useState([]); // State to store found employees
   const [editingEmployee, setEditingEmployee] = useState(null); // State to track the employee being edited
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const handleSelectChange = (event) => {
+    setSelectedRegion(event.target.value);
+  };
 
+  const regions = [
+    { id: 1, name: "America" },
+    { id: 2, name: "Europe" },
+    { id: 3, name: "United Kingdom" },
+    { id: 4, name: "Азия" },
+    { id: 5, name: "АВ/НЗ" },
+  ];
   // Function to handle tag input and add tags to state
   const handleTagKeyDown = (e) => {
     if (e.key === ' ' && tagInput.trim() !== '') {
@@ -99,6 +110,23 @@ function SearchEmployees() {
     <div className="mt-5">
       <h1>Search Employees</h1>
       <form onSubmit={handleSubmit}>
+      <div className="form-group">
+          <label htmlFor="region-select">Select region:</label>
+          <select
+            id="region-select"
+            value={selectedRegion}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled>
+              Select...
+            </option>
+            {regions.map((region) => (
+              <option key={region.id} value={region.name}>
+                {region.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="form-group">
           <label>Tags:</label>
           <div className="tags-input-container">

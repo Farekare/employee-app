@@ -1,25 +1,28 @@
-import React, { useState } from 'react';
-import './AddEmployee.css'; // Add a separate CSS file for component styles
-import axios from 'axios';
+import React, { useState } from "react";
+import "./AddEmployee.css"; // Add a separate CSS file for component styles
+import axios from "axios";
 
 function AddEmployee() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState('');
-  const [notes, setNotes] = useState('');
-
+  const [tagInput, setTagInput] = useState("");
+  const [notes, setNotes] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const handleSelectChange = (event) => {
+    setSelectedRegion(event.target.value);
+  };
   const handleTagKeyDown = (e) => {
-    if (e.key === ' ' && tagInput.trim() !== '') {
+    if (e.key === " " && tagInput.trim() !== "") {
       e.preventDefault();
       let newTag = tagInput.trim();
-      if (!newTag.startsWith('#')) {
+      if (!newTag.startsWith("#")) {
         newTag = `#${newTag}`;
       }
       if (!tags.includes(newTag)) {
         setTags([...tags, newTag]);
       }
-      setTagInput('');
+      setTagInput("");
     }
   };
 
@@ -32,25 +35,37 @@ function AddEmployee() {
     const employee = {
       name,
       email,
+      selectedRegion,
       tags,
       notes,
     };
     console.log(employee);
     try {
-      const response = await axios.post('https://solid-bull-quickly.ngrok-free.app/api/employees', employee);
-      console.log('Employee Added:', response.data);
+      const response = await axios.post(
+        "https://solid-bull-quickly.ngrok-free.app/api/employees",
+        employee
+      );
+      console.log("Employee Added:", response.data);
 
-      setName('');
-      setEmail('');
+      setName("");
+      setEmail("");
       setTags([]);
-      setNotes('');
+      setNotes("");
     } catch (error) {
-      console.error('Error adding employee:', error);
+      console.error("Error adding employee:", error);
       if (error.response) {
-        console.error('Server responded with:', error.response.data);
+        console.error("Server responded with:", error.response.data);
       }
     }
   };
+
+  const regions = [
+    { id: 1, name: "America" },
+    { id: 2, name: "Europe" },
+    { id: 3, name: "United Kingdom" },
+    { id: 4, name: "Азия" },
+    { id: 5, name: "АВ/НЗ" },
+  ];
 
   return (
     <div className="mt-5">
@@ -77,12 +92,31 @@ function AddEmployee() {
           />
         </div>
         <div className="form-group">
+          <label htmlFor="region-select">Select region:</label>
+          <select
+            id="region-select"
+            value={selectedRegion}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled>
+              Select...
+            </option>
+            {regions.map((region) => (
+              <option key={region.id} value={region.name}>
+                {region.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
           <label>Tags:</label>
           <div className="tags-input-container">
             {tags.map((tag, index) => (
               <div className="tag-item" key={index}>
                 <span className="tag-text">{tag}</span>
-                <span className="tag-remove" onClick={() => removeTag(index)}>x</span>
+                <span className="tag-remove" onClick={() => removeTag(index)}>
+                  x
+                </span>
               </div>
             ))}
             <input
@@ -103,7 +137,9 @@ function AddEmployee() {
             onChange={(e) => setNotes(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Add Employee</button>
+        <button type="submit" className="btn btn-primary">
+          Add Employee
+        </button>
       </form>
     </div>
   );

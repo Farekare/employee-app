@@ -19,7 +19,7 @@ function App() {
                 <Link className="nav-link" to="/add-employee">Add Employee</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/search-employees">Search by tags</Link>
+                <Link className="nav-link" to="/search-employees">Search employees</Link>
               </li>
             </ul>
           </div>
