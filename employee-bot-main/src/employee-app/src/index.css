@@ -1,121 +1,253 @@
 /* Сброс стилей для кросс-браузерной совместимости */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f2f5;
+  line-height: 1.6;
+}
+
+body {
+  margin: 1.5rem;
+}
+
+.navbar {
+  background-color: #007bff;
+  padding: 1rem;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 1rem;
+}
+
+.navbar-brand {
+  color: #333;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  color: #d4d4d4;
+}
+
+.navbar-nav {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.nav-link:hover {
+  color: #d4d4d4;
+}
+
+.container {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff  ;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+/* Адаптивные стили */
+@media (max-width: 768px) {
   body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f2f5;
-    line-height: 1.6;
+    margin: 0;
+    padding: 0.5rem;
   }
-  
-  .navbar {
-    background-color: #007bff;
+
+  .navbar .container {
+    flex-direction: column;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .container {
+    margin: 1rem 0;
     padding: 1rem;
   }
-  
-  .navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .navbar-brand {
-    color: #333;
-    font-size: 1.5rem;
-    text-decoration: none;
-  }
-  
-  .navbar-brand:hover {
-    color: #d4d4d4;
-  }
-  
-  .navbar-nav {
-    list-style: none;
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .nav-link {
-    color: #333;
-    text-decoration: none;
-    font-size: 1rem;
-  }
-  
-  .nav-link:hover {
-    color: #d4d4d4;
-  }
-  
-  .container {
-    max-width: 960px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
-  }
-  
+
   h1 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    text-align: center;
   }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  label {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  input {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+
   button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    align-self: flex-start;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
   }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Адаптивные стили */
-  @media (max-width: 768px) {
-    .navbar .container {
-      flex-direction: column;
-    }
-  
-    .navbar-nav {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-  
-    .container {
-      margin: 1rem;
-      padding: 1rem;
-    }
-  }
-  
+}
+
+.tags-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.tag-item {
+  display: flex;
+  align-items: center;
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.tag-text {
+  margin-right: 0.5rem;
+}
+
+.tag-remove {
+  cursor: pointer;
+}
+
+.tag-remove:hover {
+  color: #d4d4d4;
+}
+
+/* form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+
+
+.tag-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  min-width: 100px;
+}
+
+.tag-input::placeholder {
+  color: #ccc;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.employee-card {
+  background-color: #ccc;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.employee-card:hover {
+  background-color: #f1f1f1;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-body {
+  margin-bottom: 20px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+} */

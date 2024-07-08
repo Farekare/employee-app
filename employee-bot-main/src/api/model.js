@@ -13,6 +13,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         lowercase: true,
     },
+    region:
+    {
+        type: String,
+        required: true,
+        trim: true,
+    },
     tags: {
         type: Array,
         required: true,

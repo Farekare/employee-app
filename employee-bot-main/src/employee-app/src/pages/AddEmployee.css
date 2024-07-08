@@ -1,7 +1,8 @@
 .form-group {
-    margin-bottom: 1rem;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
   label {
     display: block;
     margin-bottom: 0.5rem;
@@ -15,6 +16,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 0.5rem;
+    -webkit-appearance: none;
   }
   
   .tags-input-container {

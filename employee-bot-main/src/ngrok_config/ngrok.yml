@@ -1,7 +1,7 @@
 version: "2"
-authtoken: 2fTAQHvFMq417Or8sakV3wUmRlI_6CpCoyoLRnxc32crDsVA9
+authtoken: 2cKbCBvKYxU1ZGeG5wpxOqEWXte_ym5uVQeFhZCdF8aNmWVE
 tunnels:
   backend:
     proto: http
     addr: backend:4000
-    domain: solid-bull-quickly.ngrok-free.app
+    domain: rat-cuddly-mostly.ngrok-free.app

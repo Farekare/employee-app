@@ -8,14 +8,16 @@ function AddEmployee() {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const [notes, setNotes] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState("");
+  const [region, setRegion] = useState("");
   const handleSelectChange = (event) => {
-    setSelectedRegion(event.target.value);
+    setRegion(event.target.value);
   };
   const handleTagKeyDown = (e) => {
-    if (e.key === " " && tagInput.trim() !== "") {
+    let inputTag = e.target.value;
+    setTagInput(inputTag);
+    if (inputTag.slice(-1) === " " && inputTag.trim() !== "") {
       e.preventDefault();
-      let newTag = tagInput.trim();
+      let newTag = inputTag.trim();
       if (!newTag.startsWith("#")) {
         newTag = `#${newTag}`;
       }
@@ -24,6 +26,7 @@ function AddEmployee() {
       }
       setTagInput("");
     }
+    
   };
 
   const removeTag = (indexToRemove) => {
@@ -35,14 +38,14 @@ function AddEmployee() {
     const employee = {
       name,
       email,
-      selectedRegion,
+      region,
       tags,
       notes,
     };
     console.log(employee);
     try {
       const response = await axios.post(
-        "https://solid-bull-quickly.ngrok-free.app/api/employees",
+        "https://rat-cuddly-mostly.ngrok-free.app/api/employees",
         employee
       );
       console.log("Employee Added:", response.data);
@@ -51,6 +54,7 @@ function AddEmployee() {
       setEmail("");
       setTags([]);
       setNotes("");
+      setRegion("");
     } catch (error) {
       console.error("Error adding employee:", error);
       if (error.response) {
@@ -63,8 +67,9 @@ function AddEmployee() {
     { id: 1, name: "America" },
     { id: 2, name: "Europe" },
     { id: 3, name: "United Kingdom" },
-    { id: 4, name: "Азия" },
-    { id: 5, name: "АВ/НЗ" },
+    { id: 4, name: "Asia" },
+    { id: 5, name: "AU/NZ" },
+    { id: 6, name: "Freelancers" },
   ];
 
   return (
@@ -95,7 +100,7 @@ function AddEmployee() {
           <label htmlFor="region-select">Select region:</label>
           <select
             id="region-select"
-            value={selectedRegion}
+            value={region}
             onChange={handleSelectChange}
           >
             <option value="" disabled>
@@ -123,8 +128,9 @@ function AddEmployee() {
               type="text"
               className="form-control tag-input"
               value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleTagKeyDown}
+              // onChange={(e) => setTagInput(e.target.value)}
+              // onKeyDown={handleTagKeyDown}
+              onInput={handleTagKeyDown}
               placeholder="Press Space to add a tag"
             />
           </div>
