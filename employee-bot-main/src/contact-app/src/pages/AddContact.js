@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./AddEmployee.css"; // Add a separate CSS file for component styles
+import "./AddContact.css"; // Add a separate CSS file for component styles
 import axios from "axios";
 
-function AddEmployee() {
+function AddContact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [tags, setTags] = useState([]);
@@ -35,20 +35,20 @@ function AddEmployee() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const employee = {
+    const contact = {
       name,
       email,
       region,
       tags,
       notes,
     };
-    console.log(employee);
+    console.log(contact);
     try {
       const response = await axios.post(
-        "https://rat-cuddly-mostly.ngrok-free.app/api/employees",
-        employee
+        "https://rat-cuddly-mostly.ngrok-free.app/api/contacts",
+        contact
       );
-      console.log("Employee Added:", response.data);
+      console.log("contact Added:", response.data);
 
       setName("");
       setEmail("");
@@ -56,7 +56,7 @@ function AddEmployee() {
       setNotes("");
       setRegion("");
     } catch (error) {
-      console.error("Error adding employee:", error);
+      console.error("Error adding contact:", error);
       if (error.response) {
         console.error("Server responded with:", error.response.data);
       }
@@ -74,7 +74,7 @@ function AddEmployee() {
 
   return (
     <div className="mt-5">
-      <h1>Add Employee</h1>
+      <h1>Add contact</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Name:</label>
@@ -144,11 +144,11 @@ function AddEmployee() {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Add Employee
+          Add contact
         </button>
       </form>
     </div>
   );
 }
 
-export default AddEmployee;
+export default AddContact;

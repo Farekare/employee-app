@@ -17,28 +17,28 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// Route for adding an employee
-app.post("/api/employees", async (req, res) => {
-  console.log("POST /api/employees received:", req.body);
+// Route for adding an contact
+app.post("/api/contacts", async (req, res) => {
+  console.log("POST /api/contacts received:", req.body);
   const { name, email, tags, notes, region } = req.body;
 
-  const newEmployee = { name, email, tags, notes, region };
+  const newContact = { name, email, tags, notes, region };
 
   try {
-    const employee = new User(newEmployee);
-    await employee.save();
-    res.status(201).send(employee);
-    console.log("New Employee added:", newEmployee);
+    const contact = new User(newContact);
+    await contact.save();
+    res.status(201).send(contact);
+    console.log("New contact added:", newContact);
   } catch (e) {
-    console.error("Error saving employee:", e);
-    res.status(500).send({ error: "Error adding employee" });
+    console.error("Error saving contact:", e);
+    res.status(500).send({ error: "Error adding contact" });
   }
 });
 
-// Route for searching employees by tags
-app.post("/api/search-employees", async (req, res) => {
+// Route for searching contacts by tags
+app.post("/api/search-contacts", async (req, res) => {
   const { tags, region } = req.body;
-  console.log("POST /api/search-employees-tags received:", tags, region);
+  console.log("POST /api/search-contacts-tags received:", tags, region);
   try {
     let queryObject = {};
     if (tags.length > 0) {
@@ -52,38 +52,38 @@ app.post("/api/search-employees", async (req, res) => {
 
     res.status(200).send(users);
   } catch (e) {
-    console.error("Error searching employees:", e);
-    res.status(500).send({ error: "Error searching employees" });
+    console.error("Error searching contacts:", e);
+    res.status(500).send({ error: "Error searching contacts" });
   }
 });
 
-// Route for updating an employee
-app.put("/api/employees/:id", async (req, res) => {
+// Route for updating an contact
+app.put("/api/contacts/:id", async (req, res) => {
   const { id } = req.params;
-  console.log("PUT /api/employees/:id received:", id);
-  const updatedEmployee = req.body;
+  console.log("PUT /api/contacts/:id received:", id);
+  const updatedContact = req.body;
 
   try {
-    await User.updateOne({ _id: id }, updatedEmployee);
-    res.json({ message: "Employee updated" });
-    console.log("Employee updated:", updatedEmployee);
+    await User.updateOne({ _id: id }, updatedContact);
+    res.json({ message: "contact updated" });
+    console.log("contact updated:", updatedContact);
   } catch (e) {
-    console.error("Error updating employee:", e);
-    res.status(500).send({ error: "Error updating employee" });
+    console.error("Error updating contact:", e);
+    res.status(500).send({ error: "Error updating contact" });
   }
 });
 
-// Route for deleting an employee
-app.delete("/api/employees/:id", async (req, res) => {
+// Route for deleting a contact
+app.delete("/api/contacts/:id", async (req, res) => {
   const { id } = req.params;
-  console.log("DELETE /api/employees/:id received:", id);
+  console.log("DELETE /api/contacts/:id received:", id);
 
   try {
     await User.deleteOne({ _id: id });
-    res.json({ message: "Employee deleted" });
+    res.json({ message: "contact deleted" });
   } catch (e) {
-    console.error("Error deleting employee:", e);
-    res.status(500).send({ error: "Error deleting employee" });
+    console.error("Error deleting contact:", e);
+    res.status(500).send({ error: "Error deleting contact" });
   }
 });
 

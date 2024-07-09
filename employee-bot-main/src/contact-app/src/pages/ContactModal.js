@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import "./EmployeeModal.css";
+import "./ContactModal.css";
 
-const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
+const ContactModal = ({ contact, onClose, onChange, onSave, onDelete }) => {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   useEffect(() => {
-    if (employee) {
-      setTags(employee.tags);
+    if (contact) {
+      setTags(contact.tags);
     }
-  }, [employee]);
+  }, [contact]);
   const regions = [
     { id: 1, name: "America" },
     { id: 2, name: "Europe" },
@@ -43,7 +43,7 @@ const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
     setTagInput(e.target.value);
   };
 
-  if (!employee) return null;
+  if (!contact) return null;
 
   return (
     <div
@@ -52,7 +52,7 @@ const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
     >
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Edit Employee</h2>
+          <h2>Edit Contact</h2>
         </div>
         <div className="modal-body">
           <div className="form-group">
@@ -61,7 +61,7 @@ const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
               type="text"
               className="form-control"
               name="name"
-              value={employee.name}
+              value={contact.name}
               onChange={onChange}
             />
           </div>
@@ -71,7 +71,7 @@ const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
               type="email"
               className="form-control"
               name="email"
-              value={employee.email}
+              value={contact.email}
               onChange={onChange}
             />
           </div>
@@ -81,7 +81,7 @@ const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
               className="form-control"
               id="region-select"
               name="region"
-              value={employee.region}
+              value={contact.region}
               onChange={onChange}
             >
               <option value="" disabled>
@@ -121,7 +121,7 @@ const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
               type="text"
               className="form-control"
               name="notes"
-              value={employee.notes}
+              value={contact.notes}
               onChange={onChange}
             />
           </div>
@@ -132,7 +132,7 @@ const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
           </button>
           <button
             className="btn btn-danger"
-            onClick={() => onDelete(employee._id)}
+            onClick={() => onDelete(contact._id)}
           >
             Delete
           </button>
@@ -145,4 +145,4 @@ const EmployeeModal = ({ employee, onClose, onChange, onSave, onDelete }) => {
   );
 };
 
-export default EmployeeModal;
+export default ContactModal;

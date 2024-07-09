@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import "./AddEmployee.css"; // Import separate CSS file for component styles
+import "./AddContact.css"; // Import separate CSS file for component styles
 import axios from "axios";
-import EmployeeModal from "./EmployeeModal"; // Import modal window component
+import ContactModal from "./ContactModal"; // Import modal window component
 
-function SearchEmployees() {
+function SearchContacts() {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
-  const [employees, setEmployees] = useState([]); // State to store found employees
-  const [editingEmployee, setEditingEmployee] = useState(null); // State to track the employee being edited
+  const [contacts, setContacts] = useState([]); // State to store found contacts
+  const [editingContact, setEditingContact] = useState(null); // State to track the contact being edited
   const [selectedRegion, setSelectedRegion] = useState("");
   
 
@@ -15,23 +15,23 @@ function SearchEmployees() {
   const handleSelectChange = async (event) => {
     let region = event.target.value
     setSelectedRegion(region);
-    const employee = {
+    const contact = {
       region,
       tags
     };
-    console.log(employee);
+    console.log(contact);
     try {
       const response = await axios.post(
-        "https://rat-cuddly-mostly.ngrok-free.app/api/search-employees",
-        employee
+        "https://rat-cuddly-mostly.ngrok-free.app/api/search-contacts",
+        contact
       );
-      console.log("Employees found:", response.data);
+      console.log("Contacts found:", response.data);
 
-      // Save found employees in state
-      setEmployees(response.data);
+      // Save found contacts in state
+      setContacts(response.data);
 
     } catch (error) {
-      console.error("Error searching employees:", error);
+      console.error("Error searching contacts:", error);
     }
   };
 
@@ -60,25 +60,25 @@ function SearchEmployees() {
         let searchTags = [...tags, newTag];
         setTags(searchTags);
         setTagInput("");
-        const employee = {
+        const contact = {
           region: selectedRegion,
           tags: searchTags,
         };
         
         
-        console.log(employee);
+        console.log(contact);
         try {
           const response = await axios.post(
-            "https://rat-cuddly-mostly.ngrok-free.app/api/search-employees",
-            employee
+            "https://rat-cuddly-mostly.ngrok-free.app/api/search-contacts",
+            contact
           );
-          console.log("Employees found:", response.data);
+          console.log("Contacts found:", response.data);
     
-          // Save found employees in state
-          setEmployees(response.data);
+          // Save found contacts in state
+          setContacts(response.data);
     
         } catch (error) {
-          console.error("Error searching employees:", error);
+          console.error("Error searching contacts:", error);
         }
       }
       
@@ -89,83 +89,83 @@ function SearchEmployees() {
   const removeTag = async (indexToRemove) => {
     let newTags = tags.filter((_, index) => index !== indexToRemove);
     setTags(newTags);
-    const employee = {
+    const contact = {
       region: selectedRegion,
       tags: newTags,
     };
-    console.log(employee);
+    console.log(contact);
     try {
       const response = await axios.post(
-        "https://rat-cuddly-mostly.ngrok-free.app/api/search-employees",
-        employee
+        "https://rat-cuddly-mostly.ngrok-free.app/api/search-contacts",
+        contact
       );
-      console.log("Employees found:", response.data);
+      console.log("Contacts found:", response.data);
 
-      // Save found employees in state
-      setEmployees(response.data);
+      // Save found contacts in state
+      setContacts(response.data);
 
     } catch (error) {
-      console.error("Error searching employees:", error);
+      console.error("Error searching contacts:", error);
     }
 
   };
 
 
-  // Function to handle click on employee card for editing
-  const handleCardClick = (employee) => {
-    setEditingEmployee(employee);
+  // Function to handle click on contact card for editing
+  const handleCardClick = (contact) => {
+    setEditingContact(contact);
   };
 
-  // Function to handle changes in employee edit form
+  // Function to handle changes in contact edit form
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setEditingEmployee((prevEmployee) => ({
-      ...prevEmployee,
+    setEditingContact((prevContact) => ({
+      ...prevContact,
       [name]: value,
     }));
   };
 
-  // Function to handle saving edited employee details
+  // Function to handle saving edited contact details
   const handleSave = async () => {
     try {
       await axios.put(
-        `https://rat-cuddly-mostly.ngrok-free.app/api/employees/${editingEmployee._id}`,
-        editingEmployee
+        `https://rat-cuddly-mostly.ngrok-free.app/api/contacts/${editingContact._id}`,
+        editingContact
       );
-      setEmployees((prevEmployees) =>
-        prevEmployees.map((emp) =>
-          emp._id === editingEmployee._id ? editingEmployee : emp
+      setContacts((prevContacts) =>
+        prevContacts.map((emp) =>
+          emp._id === editingContact._id ? editingContact : emp
         )
       );
-      setEditingEmployee(null);
+      setEditingContact(null);
     } catch (error) {
-      console.error("Error updating employee:", error);
+      console.error("Error updating contact:", error);
     }
   };
 
-  // Function to handle deleting an employee
+  // Function to handle deleting an contact
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `https://rat-cuddly-mostly.ngrok-free.app/api/employees/${id}`
+        `https://rat-cuddly-mostly.ngrok-free.app/api/contacts/${id}`
       );
-      setEmployees((prevEmployees) =>
-        prevEmployees.filter((emp) => emp._id !== id)
+      setContacts((prevContacts) =>
+        prevContacts.filter((emp) => emp._id !== id)
       );
-      setEditingEmployee(null);
+      setEditingContact(null);
     } catch (error) {
-      console.error("Error deleting employee:", error);
+      console.error("Error deleting contact:", error);
     }
   };
 
-  // Function to close the employee edit modal
+  // Function to close the contact edit modal
   const handleCloseModal = () => {
-    setEditingEmployee(null);
+    setEditingContact(null);
   };
 
   return (
     <div className="mt-5">
-      <h1>Search Employees</h1>
+      <h1>Search Contacts</h1>
       <h2>Total:{51}</h2>
       <form>
         <div className="form-group">
@@ -209,41 +209,41 @@ function SearchEmployees() {
       </form>
       <div className="mt-5">
         <h2>Search Results:</h2>
-        {employees.length > 0 ? (
+        {contacts.length > 0 ? (
           <div className="card-container">
-            {employees.map((employee, index) => (
+            {contacts.map((contact, index) => (
               <div
                 key={index}
-                className="employee-card"
-                onClick={() => handleCardClick(employee)}
+                className="contact-card"
+                onClick={() => handleCardClick(contact)}
               >
                 <div>
                   <div>
-                    <strong>Name:</strong> {employee.name}
+                    <strong>Name:</strong> {contact.name}
                   </div>
                   <div>
-                    <strong>Email:</strong> {employee.email}
+                    <strong>Email:</strong> {contact.email}
                   </div>
                   <div>
-                    <strong>Region:</strong> {employee.region}
+                    <strong>Region:</strong> {contact.region}
                   </div>
                   <div>
-                    <strong>Tags:</strong> {employee.tags.join(", ")}
+                    <strong>Tags:</strong> {contact.tags.join(", ")}
                   </div>
                   <div>
-                    <strong>Notes:</strong> {employee.notes}
+                    <strong>Notes:</strong> {contact.notes}
                   </div>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p>No employees found.</p>
+          <p>No contacts found.</p>
         )}
       </div>
-      {/* Render EmployeeModal component for editing */}
-      <EmployeeModal
-        employee={editingEmployee}
+      {/* Render ContactModal component for editing */}
+      <ContactModal
+        contact={editingContact}
         onClose={handleCloseModal}
         onChange={handleEditChange}
         onSave={handleSave}
@@ -253,4 +253,4 @@ function SearchEmployees() {
   );
 }
 
-export default SearchEmployees;
+export default SearchContacts;

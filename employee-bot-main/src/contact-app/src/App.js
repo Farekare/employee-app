@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/Home';
-import AddEmployee from './pages/AddEmployee';
-import SearchEmployees from './pages/SearchEmployees';
+import AddContact from './pages/AddContact';
+import SearchContacts from './pages/SearchContacts';
 
 function App() {
   return (
@@ -10,16 +10,16 @@ function App() {
       <div>
         <nav className="navbar">
           <div className="container">
-            <Link className="navbar-brand" to="/">Employee Management</Link>
+            <Link className="navbar-brand" to="/employee-app">Contact Management</Link>
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link className="nav-link" to="/">Home</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/add-employee">Add Employee</Link>
+                <Link className="nav-link" to="/employee-app/add-contact">Add Contact</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/search-employees">Search employees</Link>
+                <Link className="nav-link" to="/employee-app/search-contacts">Search Contacts</Link>
               </li>
             </ul>
           </div>
@@ -27,9 +27,9 @@ function App() {
 
         <div className="container">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/add-employee" element={<AddEmployee />} />
-            <Route path="/search-employees" element={<SearchEmployees />}/>
+            <Route path="/employee-app" element={<Home />} />
+            <Route path="/employee-app/add-contact" element={<AddContact />} />
+            <Route path="/employee-app/search-contacts" element={<SearchContacts />}/>
           </Routes>
         </div>
       </div>
