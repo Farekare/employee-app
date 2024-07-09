@@ -4,7 +4,7 @@ function Home() {
   return (
     <div className="mt-5">
       <h1>Home Page</h1>
-      <p>Welcome to the Employee Management System!</p>
+      <p>Welcome to the Сontacts Management System!</p>
     </div>
   );
 }

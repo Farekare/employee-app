@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AddContact.css"; // Add a separate CSS file for component styles
 import axios from "axios";
 
@@ -9,6 +9,23 @@ function AddContact() {
   const [tagInput, setTagInput] = useState("");
   const [notes, setNotes] = useState("");
   const [region, setRegion] = useState("");
+  const [totalContacts, setTotalContacts] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.post(
+          "https://rat-cuddly-mostly.ngrok-free.app/api/search-contacts",
+          {}
+        );
+        console.log("Total contacts found:", response.data.length);
+        setTotalContacts(response.data.length);
+      } catch (error) {
+        console.error("Error searching contacts:", error);
+      }
+    })();
+  });
+
   const handleSelectChange = (event) => {
     setRegion(event.target.value);
   };
@@ -26,7 +43,6 @@ function AddContact() {
       }
       setTagInput("");
     }
-    
   };
 
   const removeTag = (indexToRemove) => {
@@ -75,6 +91,7 @@ function AddContact() {
   return (
     <div className="mt-5">
       <h1>Add contact</h1>
+      <h2>Total: {totalContacts}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Name:</label>

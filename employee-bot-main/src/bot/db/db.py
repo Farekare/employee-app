@@ -14,7 +14,7 @@ class MongoClient():
     async def add_data(self, data: dict):
         await self._collection.insert_one(data)
 
-    async def get_data(self, parameters={}):
-        cursor = self._collection.find({'tags': {'$in': parameters}})
+    async def get_data(self):
+        cursor = self._collection.find({}, {"_id": 0, "__v": 0 })
         result = await cursor.to_list(None)
         return result

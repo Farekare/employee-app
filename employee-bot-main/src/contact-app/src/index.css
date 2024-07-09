@@ -194,7 +194,7 @@ button:hover {
   gap: 1rem;
 }
 
-.employee-card {
+.contact-card {
   background-color: #ccc;
   border: 1px solid #ddd;
   border-radius: 0.5rem;
@@ -203,7 +203,7 @@ button:hover {
   transition: background-color 0.3s ease;
 }
 
-.employee-card:hover {
+.contact-card:hover {
   background-color: #f1f1f1;
 }
 

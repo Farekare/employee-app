@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AddContact.css"; // Import separate CSS file for component styles
 import axios from "axios";
 import ContactModal from "./ContactModal"; // Import modal window component
@@ -9,15 +9,29 @@ function SearchContacts() {
   const [contacts, setContacts] = useState([]); // State to store found contacts
   const [editingContact, setEditingContact] = useState(null); // State to track the contact being edited
   const [selectedRegion, setSelectedRegion] = useState("");
-  
+  const [totalContacts, setTotalContacts] = useState(0);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.post(
+          "https://rat-cuddly-mostly.ngrok-free.app/api/search-contacts",
+          {}
+        );
+        console.log("Total contacts found:", response.data.length);
+        setTotalContacts(response.data.length);
+      } catch (error) {
+        console.error("Error searching contacts:", error);
+      }
+    })();
+  });
 
   const handleSelectChange = async (event) => {
-    let region = event.target.value
+    let region = event.target.value;
     setSelectedRegion(region);
     const contact = {
       region,
-      tags
+      tags,
     };
     console.log(contact);
     try {
@@ -29,7 +43,6 @@ function SearchContacts() {
 
       // Save found contacts in state
       setContacts(response.data);
-
     } catch (error) {
       console.error("Error searching contacts:", error);
     }
@@ -48,7 +61,7 @@ function SearchContacts() {
   const handleTagKeyDown = async (e) => {
     let inputTag = e.target.value;
     setTagInput(inputTag);
-    console.log(inputTag)
+    console.log(inputTag);
     if (inputTag.slice(-1) === " " && inputTag.trim() !== "") {
       e.preventDefault();
       let newTag = inputTag.trim();
@@ -64,8 +77,7 @@ function SearchContacts() {
           region: selectedRegion,
           tags: searchTags,
         };
-        
-        
+
         console.log(contact);
         try {
           const response = await axios.post(
@@ -73,15 +85,13 @@ function SearchContacts() {
             contact
           );
           console.log("Contacts found:", response.data);
-    
+
           // Save found contacts in state
           setContacts(response.data);
-    
         } catch (error) {
           console.error("Error searching contacts:", error);
         }
       }
-      
     }
   };
 
@@ -103,13 +113,10 @@ function SearchContacts() {
 
       // Save found contacts in state
       setContacts(response.data);
-
     } catch (error) {
       console.error("Error searching contacts:", error);
     }
-
   };
-
 
   // Function to handle click on contact card for editing
   const handleCardClick = (contact) => {
@@ -166,7 +173,7 @@ function SearchContacts() {
   return (
     <div className="mt-5">
       <h1>Search Contacts</h1>
-      <h2>Total:{51}</h2>
+      <h2>Total: {totalContacts}</h2>
       <form>
         <div className="form-group">
           <label htmlFor="region-select">Select region:</label>

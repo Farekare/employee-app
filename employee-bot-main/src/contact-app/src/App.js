@@ -10,13 +10,13 @@ function App() {
       <div>
         <nav className="navbar">
           <div className="container">
-            <Link className="navbar-brand" to="/employee-app">Contact Management</Link>
+            <Link className="navbar-brand" to="/employee-app">Contacts Management</Link>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link" to="/">Home</Link>
+                <Link className="nav-link" to="/employee-app">Home</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/employee-app/add-contact">Add Contact</Link>
+                <Link className="nav-link" to="/employee-app/add-contact">Add Contacts</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/employee-app/search-contacts">Search Contacts</Link>

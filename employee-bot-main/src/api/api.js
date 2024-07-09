@@ -41,10 +41,10 @@ app.post("/api/search-contacts", async (req, res) => {
   console.log("POST /api/search-contacts-tags received:", tags, region);
   try {
     let queryObject = {};
-    if (tags.length > 0) {
+    if (tags != undefined && tags.length > 0) {
       queryObject.tags = { $all: tags };
     }
-    if (region != "All" && region != "") {
+    if (region != undefined && region != "All" && region != "") {
       queryObject.region = region;
     }
 
