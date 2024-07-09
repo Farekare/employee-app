@@ -1,10 +1,10 @@
 import React from "react";
 
 const TagsInput = ({ value, name, tags, onChangeInput, onChangeTags }) => {
-  const handleTagInput = (e) => {
+  const handleTagInput = async (e) => {
     let inputTag = e.target.value;
     // onChangeInput passes inputTag value to a parent component. Parent components handles this value and passes it back to a child component as a value field in <input> tag
-    onChangeInput(inputTag);
+   	onChangeInput(inputTag);
     if (inputTag.slice(-1) === " " && inputTag.trim() !== "") {
       e.preventDefault();
       let newTag = inputTag.trim();
@@ -17,8 +17,11 @@ const TagsInput = ({ value, name, tags, onChangeInput, onChangeTags }) => {
       }
       onChangeInput("");
     }
+
   };
-  const removeTag = () => {};
+  const removeTag =  (indexToRemove) => {
+  	onChangeTags(tags.filter((_, index) => index !== indexToRemove));
+  };
   return (
     <div className="form-group">
       <label>Tags:</label>
@@ -35,7 +38,7 @@ const TagsInput = ({ value, name, tags, onChangeInput, onChangeTags }) => {
           type="text"
           className="form-control tag-input"
           value={value}
-          onInput={handleTagInput}
+          onInput={(e) => handleTagInput(e)}
           placeholder="Press Space to add a tag"
           name={name}
         />

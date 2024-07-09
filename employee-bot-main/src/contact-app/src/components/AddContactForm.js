@@ -6,14 +6,31 @@ import TagsInput from "./TagsInput";
 import { useState, useEffect } from "react";
 import NotesInput from "./NotesInput";
 import axios from "axios";
+import ContactsCount from "./ContactsCount";
+import "./AddContact.css"
 
 const AddContactForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [region, setRegion] = useState("");
   const [tagsInput, setTagsInput] = useState("");
-  const [tagsList, setTagsList] = useState([]);
+  const [tags, setTags] = useState([]);
   const [notes, setNotes] = useState("");
+  const [contactsCount, setContactsCount] = useState(0);
+	
+	const fetchContactsCount = async () =>
+	{
+		try {
+			const response = await axios.post(
+				"https://rat-cuddly-mostly.ngrok-free.app/api/search-contacts",
+				{}
+			);
+			console.log("Total contacts found:", response.data.length);
+			setContactsCount(response.data.length);
+		} catch (error) {
+			console.error("Error searching contacts:", error);
+		}
+	}
 
   const handleNameChange = (value) => {
     setName(value);
@@ -27,8 +44,8 @@ const AddContactForm = () => {
   const handleTagsInputChange = (value) => {
     setTagsInput(value);
   };
-  const handleTagListChange = (value) => {
-    setTagsList(value);
+  const handleTagsChange = (value) => {
+    setTags(value);
   };
   const handleNotesChange = (value) => {
     setNotes(value);
@@ -38,7 +55,7 @@ const AddContactForm = () => {
     setEmail("");
     setRegion("");
     setTagsInput("");
-    setTagsList([]);
+    setTags([]);
     setNotes("");
   };
 
@@ -48,7 +65,7 @@ const AddContactForm = () => {
       name,
       email,
       region,
-      tagsList,
+      tags,
       notes,
     };
     console.log(contact);
@@ -57,22 +74,21 @@ const AddContactForm = () => {
         "https://rat-cuddly-mostly.ngrok-free.app/api/contacts",
         contact
       );
-			console.log("contact Added:", response.data);
+      console.log("contact Added:", response.data);
     } catch (error) {
       console.error("Error adding contact:", error);
       if (error.response) {
         console.error("Server responded with:", error.response.data);
       }
-			
     }
-    
+		fetchContactsCount();
     clearState();
   };
 
   return (
     <div className="mt-5">
       <h1>Add contact</h1>
-      <h2>Total: </h2>
+      <ContactsCount value={contactsCount} fetchContactsCount={fetchContactsCount}/>
       <form onSubmit={handleSubmit}>
         <NameInput value={name} name="name" onChange={handleNameChange} />
         <EmailInput value={email} name="email" onChange={handleEmailChange} />
@@ -92,9 +108,9 @@ const AddContactForm = () => {
         <TagsInput
           value={tagsInput}
           name="tags"
-          tags={tagsList}
+          tags={tags}
           onChangeInput={handleTagsInputChange}
-          onChangeTags={handleTagListChange}
+          onChangeTags={handleTagsChange}
         />
         <NotesInput value={notes} name="notes" onChange={handleNotesChange} />
         <button type="submit" className="btn btn-primary">

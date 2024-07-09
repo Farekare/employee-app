@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './components/Home';
 // import AddContact from './pages/AddContact';
 import AddContactForm from './components/AddContactForm';
-import SearchContacts from './pages/SearchContacts';
+// import SearchContacts from './pages/SearchContacts';
+import SeacrhContactsForm from './components/SearchContactsForm';
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
           <Routes>
             <Route path="/employee-app" element={<Home />} />
             <Route path="/employee-app/add-contact" element={<AddContactForm />} />
-            <Route path="/employee-app/search-contacts" element={<SearchContacts />}/>
+            <Route path="/employee-app/search-contacts" element={<SeacrhContactsForm />}/>
           </Routes>
         </div>
       </div>

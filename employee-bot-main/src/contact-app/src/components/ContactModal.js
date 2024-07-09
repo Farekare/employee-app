@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./ContactModal.css";
+import './ContactModal.css'
 
 const ContactModal = ({ contact, onClose, onChange, onSave, onDelete }) => {
   const [tags, setTags] = useState([]);
