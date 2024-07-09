@@ -24,7 +24,7 @@ function AddContact() {
         console.error("Error searching contacts:", error);
       }
     })();
-  });
+  }, []);
 
   const handleSelectChange = (event) => {
     setRegion(event.target.value);
@@ -71,6 +71,7 @@ function AddContact() {
       setTags([]);
       setNotes("");
       setRegion("");
+      setTotalContacts(totalContacts + 1);
     } catch (error) {
       console.error("Error adding contact:", error);
       if (error.response) {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/Home';
-import AddContact from './pages/AddContact';
+// import AddContact from './pages/AddContact';
+import AddContactForm from './components/AddContactForm';
 import SearchContacts from './pages/SearchContacts';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/employee-app" element={<Home />} />
-            <Route path="/employee-app/add-contact" element={<AddContact />} />
+            <Route path="/employee-app/add-contact" element={<AddContactForm />} />
             <Route path="/employee-app/search-contacts" element={<SearchContacts />}/>
           </Routes>
         </div>
