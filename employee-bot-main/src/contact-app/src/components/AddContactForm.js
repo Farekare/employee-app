@@ -32,22 +32,28 @@ const AddContactForm = () => {
 		}
 	}
 
-  const handleNameChange = (value) => {
+  const handleNameChange = (e) => {
+    const value = e.target.value;
     setName(value);
   };
-  const handleEmailChange = (value) => {
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
     setEmail(value);
   };
-  const handleRegionChange = (value) => {
+  const handleRegionChange = (e) => {
+    const value = e.target.value;
     setRegion(value);
   };
+  // using value not event here because it computes in <TagInput/> component before calling handler function
   const handleTagsInputChange = (value) => {
     setTagsInput(value);
   };
+  // same
   const handleTagsChange = (value) => {
     setTags(value);
   };
-  const handleNotesChange = (value) => {
+  const handleNotesChange = (e) => {
+    const value = e.target.value;
     setNotes(value);
   };
   const clearState = () => {

@@ -36,6 +36,7 @@ const SeacrhContactsForm = () => {
     setContactsCount(data.length);
   };
 
+  // value is computed in <TagInput/> component so we don't pass event as an argument
   const handleTagsInputChange = (value) => {
     setTagsInput(value);
   };
@@ -44,7 +45,8 @@ const SeacrhContactsForm = () => {
     const data = await fetchContacts(region, value);
     setContacts(data);
   };
-  const handleRegionChange = async (value) => {
+  const handleRegionChange = async (e) => {
+    const value = e.target.value;
     setRegion(value);
     const data = await fetchContacts(value, tags);
     setContacts(data);
@@ -57,7 +59,9 @@ const SeacrhContactsForm = () => {
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditingContact((prevContact) => ({
+      // first we use spread operator
       ...prevContact,
+      // then we use computed properties
       [name]: value,
     }));
   };

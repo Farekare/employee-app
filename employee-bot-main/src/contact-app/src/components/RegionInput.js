@@ -4,7 +4,7 @@ const RegionInput = ({ name, value, onChange, regions }) => {
   return (
     <div className="form-group">
       <label htmlFor="region-select">Select region:</label>
-      <select id="region-select" value={value} onChange={(e) => onChange(e.target.value)} name={name}>
+      <select id="region-select" value={value} onChange={onChange} name={name}>
         <option value="" disabled>
           Select...
         </option>

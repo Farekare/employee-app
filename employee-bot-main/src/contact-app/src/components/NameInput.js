@@ -9,7 +9,7 @@ const NameInput = ({ value, onChange, name }) => {
         className="form-control"
         value={value}
         name={name}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         required
       />
     </div>

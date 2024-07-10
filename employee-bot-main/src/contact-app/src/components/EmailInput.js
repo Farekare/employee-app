@@ -11,7 +11,7 @@ const EmailInput = ({value, onChange, name}) =>
             type="email"
             className="form-control"
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={onChange}
             required
           />
         </div>

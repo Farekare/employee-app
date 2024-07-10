@@ -1,46 +1,25 @@
 import React, { useState, useEffect } from "react";
-import './ContactModal.css'
+import "./ContactModal.css";
+import NameInput from "./NameInput";
+import EmailInput from "./EmailInput";
+import RegionInput from "./RegionInput";
+import TagsInput from "./TagsInput";
+import NotesInput from "./NotesInput";
 
 const ContactModal = ({ contact, onClose, onChange, onSave, onDelete }) => {
   const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState("");
+  const [tagsInput, setTagsInput] = useState("");
   useEffect(() => {
     if (contact) {
       setTags(contact.tags);
     }
   }, [contact]);
-  const regions = [
-    { id: 1, name: "America" },
-    { id: 2, name: "Europe" },
-    { id: 3, name: "United Kingdom" },
-    { id: 4, name: "Asia" },
-    { id: 5, name: "AU/NZ" },
-    { id: 6, name: "Freelancers" },
-  ];
-  const handleTagKeyDown = (e) => {
-    if (e.key === " " && tagInput.trim() !== "") {
-      e.preventDefault();
-      let newTag = tagInput.trim();
-      if (!newTag.startsWith("#")) {
-        newTag = `#${newTag}`;
-      }
-      if (!tags.includes(newTag)) {
-        const newTags = [...tags, newTag];
-        setTags(newTags);
-        onChange({ target: { name: "tags", value: newTags } });
-      }
-      setTagInput("");
-    }
+  const handleTagsInputChange = (value) => {
+    setTagsInput(value);
   };
-
-  const removeTag = (indexToRemove) => {
-    const newTags = tags.filter((_, index) => index !== indexToRemove);
-    setTags(newTags);
-    onChange({ target: { name: "tags", value: newTags } });
-  };
-
-  const handleTagChange = (e) => {
-    setTagInput(e.target.value);
+  const handleTagsChange = (value) => {
+    setTags(value);
+    onChange({ target: { name: "tags", value: value } })
   };
 
   if (!contact) return null;
@@ -55,76 +34,23 @@ const ContactModal = ({ contact, onClose, onChange, onSave, onDelete }) => {
           <h2>Edit Contact</h2>
         </div>
         <div className="modal-body">
-          <div className="form-group">
-            <label>Name:</label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              value={contact.name}
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-group">
-            <label>Email:</label>
-            <input
-              type="email"
-              className="form-control"
-              name="email"
-              value={contact.email}
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-group">
-            <label>Region:</label>
-            <select
-              className="form-control"
-              id="region-select"
-              name="region"
-              value={contact.region}
-              onChange={onChange}
-            >
-              <option value="" disabled>
-                Select...
-              </option>
-              {regions.map((region) => (
-                <option key={region.id} value={region.name}>
-                  {region.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Tags:</label>
-            <div className="tags-input-container">
-              {tags.map((tag, index) => (
-                <div className="tag-item" key={index}>
-                  <span className="tag-text">{tag}</span>
-                  <span className="tag-remove" onClick={() => removeTag(index)}>
-                    x
-                  </span>
-                </div>
-              ))}
-              <input
-                type="text"
-                className="form-control tag-input"
-                value={tagInput}
-                onChange={handleTagChange}
-                onKeyDown={handleTagKeyDown}
-                placeholder="Press Space to add a tag"
-              />
-            </div>
-          </div>
-          <div className="form-group">
-            <label>Notes:</label>
-            <input
-              type="text"
-              className="form-control"
-              name="notes"
-              value={contact.notes}
-              onChange={onChange}
-            />
-          </div>
+          <NameInput value={contact.name} onChange={onChange} name="name" />
+          <EmailInput value={contact.email} onChange={onChange} name="email" />
+          <RegionInput
+            value={contact.region}
+            onChange={onChange}
+            name="region"
+            regions={[
+              { id: 1, name: "America" },
+              { id: 2, name: "Europe" },
+              { id: 3, name: "United Kingdom" },
+              { id: 4, name: "Asia" },
+              { id: 5, name: "AU/NZ" },
+              { id: 6, name: "Freelancers" },
+            ]}
+          />
+          <TagsInput value={tagsInput} name="tags" onChangeInput={handleTagsInputChange} onChangeTags={handleTagsChange} tags={tags}/>
+          <NotesInput value={contact.notes} name="notes" onChange={onChange} />
         </div>
         <div className="modal-footer">
           <button className="btn btn-success" onClick={onSave}>
