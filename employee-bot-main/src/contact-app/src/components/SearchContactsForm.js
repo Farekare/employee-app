@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ContactModal from "./ContactModal";
-import ContactsCount from "./ContactsCount";
 import RegionInput from "./RegionInput";
 import TagsInput from "./TagsInput";
 import ContactCards from "./ContactCards";
@@ -19,13 +18,13 @@ const SeacrhContactsForm = () => {
   };
   const handleTagsChange = async (value) => {
     setTags(value);
-    const data = await fetchContacts(region, value);
+    const data = await fetchContacts({ region, tags: value });
     setContacts(data);
   };
   const handleRegionChange = async (e) => {
     const value = e.target.value;
     setRegion(value);
-    const data = await fetchContacts(value, tags);
+    const data = await fetchContacts({ region: value, tags });
     setContacts(data);
   };
 
@@ -44,13 +43,14 @@ const SeacrhContactsForm = () => {
   };
 
   const handleSave = async () => {
-    if (editingContact != null)
+    if (editingContact != null && editingContact.tags.length != 0) {
       await updateContact(editingContact, editingContact._id);
-    setContacts((prevContacts) =>
-      prevContacts.map((contact) =>
-        contact._id === editingContact._id ? editingContact : contact
-      )
-    );
+      setContacts((prevContacts) =>
+        prevContacts.map((contact) =>
+          contact._id === editingContact._id ? editingContact : contact
+        )
+      );
+    }
     setEditingContact(null);
   };
 
