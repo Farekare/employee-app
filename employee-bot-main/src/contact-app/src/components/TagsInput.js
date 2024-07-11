@@ -2,12 +2,12 @@ import React from "react";
 
 const TagsInput = ({ value, name, tags, onChangeInput, onChangeTags }) => {
   const handleTagInput = (e) => {
-    let inputTag = e.target.value;
-    // onChangeInput passes inputTag value to a parent component. Parent components handles this value and passes it back to a child component as a value field in <input> tag
-   	onChangeInput(inputTag);
-    if (inputTag.slice(-1) === " " && inputTag.trim() !== "") {
+    let currentInputTag = e.target.value;
+    // onChangeInput passes currentInputTag value to a parent component. Parent components handles this value and passes it back to a child component as a value field in <input> tag
+   	onChangeInput(currentInputTag);
+    if (currentInputTag.slice(-1) === " " && currentInputTag.trim() !== "") {
       e.preventDefault();
-      let newTag = inputTag.trim();
+      let newTag = currentInputTag.trim();
       if (!newTag.startsWith("#")) {
         newTag = `#${newTag}`;
       }

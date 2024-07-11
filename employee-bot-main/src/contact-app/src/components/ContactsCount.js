@@ -3,13 +3,12 @@ import React, { useEffect} from "react";
 const ContactsCount = ({value, fetchContactsCount}) => {
 
   useEffect(() => {
-    // Первый запрос сразу при монтировании компонента
+    // first fetching right after component render
     fetchContactsCount();
 
-    // Установка интервала для выполнения запроса каждые 10 секунд
+    // interfval for 10 seconds 
     const intervalId = setInterval(fetchContactsCount, 10000);
 
-    // Очистка интервала при размонтировании компонента
     return () => clearInterval(intervalId);
   }, []);
   return <h2>Total: {value}</h2>;

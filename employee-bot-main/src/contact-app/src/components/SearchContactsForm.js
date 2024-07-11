@@ -1,40 +1,17 @@
 import React, { useState } from "react";
-import axios from "axios";
 import ContactModal from "./ContactModal";
 import ContactsCount from "./ContactsCount";
 import RegionInput from "./RegionInput";
 import TagsInput from "./TagsInput";
 import ContactCards from "./ContactCards";
+import { fetchContacts, updateContact, deleteContact } from "../requests";
+
 const SeacrhContactsForm = () => {
   const [tags, setTags] = useState([]);
   const [tagsInput, setTagsInput] = useState("");
   const [editingContact, setEditingContact] = useState(null);
   const [region, setRegion] = useState("");
-  const [contactsCount, setContactsCount] = useState(0);
   const [contacts, setContacts] = useState([]);
-
-  const fetchContacts = async (reg, tgs) => {
-    const contact = {
-      region: reg,
-      tags: tgs,
-    };
-    console.log(contact);
-    try {
-      const response = await axios.post(
-        "https://rat-cuddly-mostly.ngrok-free.app/api/search-contacts",
-        contact
-      );
-      console.log("Contacts found:", response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Error searching contacts:", error);
-      return undefined;
-    }
-  };
-  const fetchContactsCount = async () => {
-    const data = await fetchContacts(undefined, undefined);
-    setContactsCount(data.length);
-  };
 
   // value is computed in <TagInput/> component so we don't pass event as an argument
   const handleTagsInputChange = (value) => {
@@ -67,34 +44,20 @@ const SeacrhContactsForm = () => {
   };
 
   const handleSave = async () => {
-    try {
-      await axios.put(
-        `https://rat-cuddly-mostly.ngrok-free.app/api/contacts/${editingContact._id}`,
-        editingContact
-      );
-      setContacts((prevContacts) =>
-        prevContacts.map((emp) =>
-          emp._id === editingContact._id ? editingContact : emp
-        )
-      );
-      setEditingContact(null);
-    } catch (error) {
-      console.error("Error updating contact:", error);
-    }
+    if (editingContact != null)
+      await updateContact(editingContact, editingContact._id);
+    setContacts((prevContacts) =>
+      prevContacts.map((contact) =>
+        contact._id === editingContact._id ? editingContact : contact
+      )
+    );
+    setEditingContact(null);
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(
-        `https://rat-cuddly-mostly.ngrok-free.app/api/contacts/${id}`
-      );
-      setContacts((prevContacts) =>
-        prevContacts.filter((emp) => emp._id !== id)
-      );
-      setEditingContact(null);
-    } catch (error) {
-      console.error("Error deleting contact:", error);
-    }
+    await deleteContact(id);
+    setContacts((prevContacts) => prevContacts.filter((emp) => emp._id !== id));
+    setEditingContact(null);
   };
 
   const handleCloseModal = () => {
@@ -103,10 +66,7 @@ const SeacrhContactsForm = () => {
   return (
     <div className="mt-5">
       <h1>Search Contacts</h1>
-      <ContactsCount
-        fetchContactsCount={fetchContactsCount}
-        value={contactsCount}
-      />
+      <h2>Contacts found: {contacts.length}</h2>
       <RegionInput
         name="region"
         onChange={handleRegionChange}

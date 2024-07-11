@@ -8,14 +8,14 @@ import NotesInput from "./NotesInput";
 
 const ContactModal = ({ contact, onClose, onChange, onSave, onDelete }) => {
   const [tags, setTags] = useState([]);
-  const [tagsInput, setTagsInput] = useState("");
+  const [currentTagInput, setCurrentTagInput] = useState("");
   useEffect(() => {
     if (contact) {
       setTags(contact.tags);
     }
   }, [contact]);
   const handleTagsInputChange = (value) => {
-    setTagsInput(value);
+    setCurrentTagInput(value);
   };
   const handleTagsChange = (value) => {
     setTags(value);
@@ -49,7 +49,7 @@ const ContactModal = ({ contact, onClose, onChange, onSave, onDelete }) => {
               { id: 6, name: "Freelancers" },
             ]}
           />
-          <TagsInput value={tagsInput} name="tags" onChangeInput={handleTagsInputChange} onChangeTags={handleTagsChange} tags={tags}/>
+          <TagsInput value={currentTagInput} name="tags" onChangeInput={handleTagsInputChange} onChangeTags={handleTagsChange} tags={tags}/>
           <NotesInput value={contact.notes} name="notes" onChange={onChange} />
         </div>
         <div className="modal-footer">

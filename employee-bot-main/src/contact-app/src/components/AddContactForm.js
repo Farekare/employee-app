@@ -7,30 +7,26 @@ import { useState, useEffect } from "react";
 import NotesInput from "./NotesInput";
 import axios from "axios";
 import ContactsCount from "./ContactsCount";
-import "./AddContact.css"
+import "./AddContact.css";
+import { insertContact, fetchContacts } from "../requests";
 
 const AddContactForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [region, setRegion] = useState("");
-  const [tagsInput, setTagsInput] = useState("");
+  const [currentTagInput, setCurrentTagInput] = useState("");
   const [tags, setTags] = useState([]);
   const [notes, setNotes] = useState("");
   const [contactsCount, setContactsCount] = useState(0);
-	
-	const fetchContactsCount = async () =>
-	{
-		try {
-			const response = await axios.post(
-				"https://rat-cuddly-mostly.ngrok-free.app/api/search-contacts",
-				{}
-			);
-			console.log("Total contacts found:", response.data.length);
-			setContactsCount(response.data.length);
-		} catch (error) {
-			console.error("Error searching contacts:", error);
-		}
-	}
+
+  const updateContactsCount = async () => {
+    // fetching with payload as an empty object gives all contacts in database
+    const data = await fetchContacts({});
+    if (data != undefined) {
+      console.log("Total contacts found:", data.length);
+      setContactsCount(data.length);
+    }
+  };
 
   const handleNameChange = (e) => {
     const value = e.target.value;
@@ -46,7 +42,7 @@ const AddContactForm = () => {
   };
   // using value not event here because it computes in <TagInput/> component before calling handler function
   const handleTagsInputChange = (value) => {
-    setTagsInput(value);
+    setCurrentTagInput(value);
   };
   // same
   const handleTagsChange = (value) => {
@@ -60,7 +56,7 @@ const AddContactForm = () => {
     setName("");
     setEmail("");
     setRegion("");
-    setTagsInput("");
+    setCurrentTagInput("");
     setTags([]);
     setNotes("");
   };
@@ -75,26 +71,18 @@ const AddContactForm = () => {
       notes,
     };
     console.log(contact);
-    try {
-      const response = await axios.post(
-        "https://rat-cuddly-mostly.ngrok-free.app/api/contacts",
-        contact
-      );
-      console.log("contact Added:", response.data);
-    } catch (error) {
-      console.error("Error adding contact:", error);
-      if (error.response) {
-        console.error("Server responded with:", error.response.data);
-      }
-    }
-		fetchContactsCount();
+    await insertContact(contact);
+    updateContactsCount();
     clearState();
   };
 
   return (
     <div className="mt-5">
       <h1>Add contact</h1>
-      <ContactsCount value={contactsCount} fetchContactsCount={fetchContactsCount}/>
+      <ContactsCount
+        value={contactsCount}
+        fetchContactsCount={updateContactsCount}
+      />
       <form onSubmit={handleSubmit}>
         <NameInput value={name} name="name" onChange={handleNameChange} />
         <EmailInput value={email} name="email" onChange={handleEmailChange} />
@@ -112,7 +100,7 @@ const AddContactForm = () => {
           ]}
         />
         <TagsInput
-          value={tagsInput}
+          value={currentTagInput}
           name="tags"
           tags={tags}
           onChangeInput={handleTagsInputChange}

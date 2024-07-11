@@ -6,14 +6,12 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from handlers.message_handlers import message_router
-from handlers.web_app_data_handlers import web_app_data_router
 
 load_dotenv()
 
 # main dispatcher
 dp = Dispatcher()
 dp.include_router(message_router)
-dp.include_router(web_app_data_router)
 TOKEN = getenv('BOT_TOKEN')
 
 async def main():

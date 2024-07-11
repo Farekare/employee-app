@@ -6,7 +6,6 @@ const User = require("./model");
 const app = express();
 const PORT = 4000;
 
-// CORS configuration
 const corsOptions = {
   origin: "https://farekare.github.io",
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -17,9 +16,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// Route for adding an contact
-app.post("/api/contacts", async (req, res) => {
-  console.log("POST /api/contacts received:", req.body);
+
+app.post("/api/insert-contact", async (req, res) => {
+  console.log("POST /api/insert-contact received:", req.body);
   const { name, email, tags, notes, region } = req.body;
 
   const newContact = { name, email, tags, notes, region };
@@ -28,36 +27,35 @@ app.post("/api/contacts", async (req, res) => {
     const contact = new User(newContact);
     await contact.save();
     res.status(201).send(contact);
-    console.log("New contact added:", newContact);
+    console.log("New contact inserted:", newContact);
   } catch (e) {
     console.error("Error saving contact:", e);
-    res.status(500).send({ error: "Error adding contact" });
+    res.status(500).send({ error: "Error inserting contact" });
   }
 });
 
-// Route for searching contacts by tags
-app.post("/api/search-contacts", async (req, res) => {
+app.post("/api/fetch-contacts", async (req, res) => {
   const { tags, region } = req.body;
-  console.log("POST /api/search-contacts-tags received:", tags, region);
+  console.log("POST /api/fetch-contacts received:", tags, region);
   try {
-    let queryObject = {};
+    let query = {};
     if (tags != undefined && tags.length > 0) {
-      queryObject.tags = { $all: tags };
+      query.tags = { $all: tags };
     }
     if (region != undefined && region != "All" && region != "") {
-      queryObject.region = region;
+      query.region = region;
     }
 
-    const users = await User.find(queryObject);
+    const users = await User.find(query);
 
     res.status(200).send(users);
   } catch (e) {
-    console.error("Error searching contacts:", e);
-    res.status(500).send({ error: "Error searching contacts" });
+    console.error("Error fetching contacts:", e);
+    res.status(500).send({ error: "Error fetching contacts" });
   }
 });
 
-// Route for updating an contact
+// Route for updating a contact
 app.put("/api/contacts/:id", async (req, res) => {
   const { id } = req.params;
   console.log("PUT /api/contacts/:id received:", id);
