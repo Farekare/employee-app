@@ -50,8 +50,8 @@ const SeacrhContactsForm = () => {
           contact._id === editingContact._id ? editingContact : contact
         )
       );
+      setEditingContact(null);
     }
-    setEditingContact(null);
   };
 
   const handleDelete = async (id) => {

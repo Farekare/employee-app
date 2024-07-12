@@ -5,7 +5,6 @@ import RegionInput from "./RegionInput";
 import TagsInput from "./TagsInput";
 import { useState, useEffect } from "react";
 import NotesInput from "./NotesInput";
-import axios from "axios";
 import ContactsCount from "./ContactsCount";
 import "./AddContact.css";
 import { insertContact, fetchContacts } from "../requests";

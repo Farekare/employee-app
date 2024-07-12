@@ -49,7 +49,9 @@ const ContactModal = ({ contact, onClose, onChange, onSave, onDelete }) => {
               { id: 6, name: "Freelancers" },
             ]}
           />
+          
           <TagsInput value={currentTagInput} name="tags" onChangeInput={handleTagsInputChange} onChangeTags={handleTagsChange} tags={tags}/>
+          {tags.length == 0 ? (<strong>Contact with 0 tags cannot be saved!</strong>) : null}
           <NotesInput value={contact.notes} name="notes" onChange={onChange} />
         </div>
         <div className="modal-footer">

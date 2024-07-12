@@ -3,11 +3,9 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram import types
 from keyboards.miniapps_keyboards import addEmployeeKeyboard
-from db.db import MongoClient
 from os import getenv
 from dotenv import load_dotenv
-import csv
-import io
+from .handler_utils import make_csv_string
 from .fsm import FSM
 from aiogram.fsm.context import FSMContext
 
@@ -31,25 +29,11 @@ async def handle_password(message:Message, state:FSMContext):
         await message.answer('Incorrect password.')
 
     
-
 # /csv command handler
 @message_router.message(FSM.authorized, Command('csv'))
 async def csv_export_handler(message: Message):
     await message.answer('Contacts list in csv format:')
-    client = MongoClient(getenv('DB_URI'),'telegram_bot', 'users')
-    data = await client.get_data()
-
-    fields = ['name', 'email', 'region', 'tags', 'notes']
-
-    csv_buffer = io.StringIO()
-    writer = csv.DictWriter(csv_buffer, fieldnames=fields)
-    writer.writeheader()
-    for row in data:
-        row['tags'] = ', '.join(row['tags'])
-        writer.writerow(row)
-
-    csv_string = csv_buffer.getvalue().encode()
-    csv_buffer.close()
+    csv_string = await make_csv_string()
     input_file = types.BufferedInputFile(csv_string,'contacts.csv')
     await message.answer_document(input_file)
     
