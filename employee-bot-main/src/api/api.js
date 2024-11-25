@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const User = require("./model");
+const axios = require("axios");
+const Counter = require("./counter")
 const app = express();
 const PORT = 4000;
 
@@ -17,15 +19,44 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 
+async function notifyTelegramBot(chatId) {
+  try {
+    const BOT_TOKEN = process.env.BOT_TOKEN;
+    const notificationUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    
+    await axios.post(notificationUrl, {
+      text: "10 new contacts have been added. Generating CSV report...",
+      chat_id: chatId,
+    });
+  } catch (error) {
+    console.error('Error notifying Telegram bot:', error);
+  }
+}
+
 app.post("/api/insert-contact", async (req, res) => {
   console.log("POST /api/insert-contact received:", req.body);
-  const { name, email, tags, notes, region } = req.body;
+  const { name, email, tags, notes, region, chatId } = req.body;
 
   const newContact = { name, email, tags, notes, region };
 
   try {
+    // Сохраняем новый контакт
     const contact = new User(newContact);
     await contact.save();
+
+    // Обновляем счетчик
+    const counter = await Counter.findByIdAndUpdate(
+      'insertCounter',
+      { $inc: { count: 1 } },
+      { new: true, upsert: true }
+    );
+
+    // Проверяем, достигли ли мы 10 вставок
+    if (counter.count % 1 === 0) {
+      // Отправляем уведомление боту
+      await notifyTelegramBot(chatId);
+    }
+
     res.status(201).send(contact);
     console.log("New contact inserted:", newContact);
   } catch (e) {
