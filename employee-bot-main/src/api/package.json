@@ -4,7 +4,9 @@
     "csv": "^6.3.9",
     "express": "^4.19.2",
     "mongoose": "^8.4.1",
+    "json2csv": "*",
     "axios": "^1.7.2"
+    
   },
   "name": "backend",
   "version": "1.0.0",

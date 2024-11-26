@@ -4,7 +4,10 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const User = require("./model");
 const axios = require("axios");
-const Counter = require("./counter")
+const Counter = require("./counter");
+const { Parser } = require('json2csv');
+const FormData = require('form-data');
+
 const app = express();
 const PORT = 4000;
 
@@ -14,29 +17,145 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-// Apply CORS middleware globally
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
+// Функция для генерации и отправки CSV со всеми контактами
+async function generateAndSendCSV(chatId) {
+  try {
+    // Получаем общее количество контактов
+    const totalContacts = await User.countDocuments();
+    
+    // Отправляем сообщение с информацией о начале генерации
+    const BOT_TOKEN = process.env.BOT_TOKEN;
+    await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      chat_id: chatId,
+      text: `Starting CSV generation for ${totalContacts} contacts...`
+    });
 
+    // Получаем все контакты
+    const contacts = await User.find()
+      .lean()
+      .select('name email tags notes region'); // выбираем нужные поля
+
+    if (contacts.length === 0) {
+      await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        chat_id: chatId,
+        text: "No contacts found in the database."
+      });
+      return;
+    }
+
+    // Преобразуем даты и массивы в строки для CSV
+    const processedContacts = contacts.map(contact => ({
+      ...contact,
+      tags: contact.tags.join(', ')
+    }));
+
+    // Определяем поля для CSV
+    const fields = [
+      { 
+        label: 'Name',
+        value: 'name'
+      },
+      {
+        label: 'Email',
+        value: 'email'
+      },
+      {
+        label: 'Tags',
+        value: 'tags'
+      },
+      {
+        label: 'Notes',
+        value: 'notes'
+      },
+      {
+        label: 'Region',
+        value: 'region'
+      }
+    ];
+
+    // Опции для генерации CSV
+    const json2csvParser = new Parser({ 
+      fields,
+      delimiter: ',',
+      quote: '"',
+      escapeQuote: '"',
+      header: true
+    });
+
+    // Генерируем CSV в памяти
+    const csv = json2csvParser.parse(processedContacts);
+
+    // Создаем form-data для отправки файла
+    const form = new FormData();
+    form.append('document', Buffer.from(csv, 'utf-8'), {
+      filename: `contacts_export_${new Date().toISOString().split('T')[0]}.csv`,
+      contentType: 'text/csv',
+    });
+    form.append('chat_id', chatId);
+    form.append('caption', `Complete contacts export (${contacts.length} records)`);
+
+    // Отправляем файл в Telegram
+    const response = await axios.post(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`,
+      form,
+      {
+        headers: {
+          ...form.getHeaders(),
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      }
+    );
+
+    // Отправляем сообщение об успешном завершении
+    await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      chat_id: chatId,
+      text: `✅ CSV file has been generated and sent successfully!\nTotal contacts: ${contacts.length}`
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error generating and sending CSV:', error);
+    
+    // Отправляем сообщение об ошибке в Telegram
+    try {
+      await axios.post(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
+        chat_id: chatId,
+        text: `❌ Error generating CSV file: ${error.message}`
+      });
+    } catch (telegramError) {
+      console.error('Error sending error message to Telegram:', telegramError);
+    }
+    
+    throw error;
+  }
+}
+
+// Функция уведомления в Telegram
 async function notifyTelegramBot(chatId) {
   try {
     const BOT_TOKEN = process.env.BOT_TOKEN;
     const notificationUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
     
+    // Отправляем начальное уведомление
     await axios.post(notificationUrl, {
-      text: "10 new contacts have been added. Generating CSV report...",
+      text: "New contacts have been added. Generating full CSV report...",
       chat_id: chatId,
     });
+
+    // Генерируем и отправляем CSV
+    await generateAndSendCSV(chatId);
   } catch (error) {
-    console.error('Error notifying Telegram bot:', error);
+    console.error('Error in Telegram notification process:', error);
   }
 }
 
 app.post("/api/insert-contact", async (req, res) => {
   console.log("POST /api/insert-contact received:", req.body);
-  const { name, email, tags, notes, region, chatId } = req.body;
-
+  const { name, email, tags, notes, region } = req.body;
   const newContact = { name, email, tags, notes, region };
 
   try {
@@ -50,11 +169,12 @@ app.post("/api/insert-contact", async (req, res) => {
       { $inc: { count: 1 } },
       { new: true, upsert: true }
     );
-
+    const ADMIN_ID= process.env.ADMIN_ID;
+    console.log(ADMIN_ID)
     // Проверяем, достигли ли мы 10 вставок
-    if (counter.count % 1 === 0) {
-      // Отправляем уведомление боту
-      await notifyTelegramBot(chatId);
+    if (counter.count % 10 === 0) {
+      // Отправляем уведомление и CSV
+      await notifyTelegramBot(ADMIN_ID);
     }
 
     res.status(201).send(contact);
@@ -65,6 +185,7 @@ app.post("/api/insert-contact", async (req, res) => {
   }
 });
 
+// Остальные маршруты остаются без изменений
 app.post("/api/fetch-contacts", async (req, res) => {
   const { tags, region } = req.body;
   console.log("POST /api/fetch-contacts received:", tags, region);
@@ -76,9 +197,7 @@ app.post("/api/fetch-contacts", async (req, res) => {
     if (region != undefined && region != "All" && region != "") {
       query.region = region;
     }
-
     const users = await User.find(query);
-
     res.status(200).send(users);
   } catch (e) {
     console.error("Error fetching contacts:", e);
@@ -86,12 +205,10 @@ app.post("/api/fetch-contacts", async (req, res) => {
   }
 });
 
-// Route for updating a contact
 app.put("/api/contacts/:id", async (req, res) => {
   const { id } = req.params;
   console.log("PUT /api/contacts/:id received:", id);
   const updatedContact = req.body;
-
   try {
     await User.updateOne({ _id: id }, updatedContact);
     res.json({ message: "contact updated" });
@@ -102,11 +219,9 @@ app.put("/api/contacts/:id", async (req, res) => {
   }
 });
 
-// Route for deleting a contact
 app.delete("/api/contacts/:id", async (req, res) => {
   const { id } = req.params;
   console.log("DELETE /api/contacts/:id received:", id);
-
   try {
     await User.deleteOne({ _id: id });
     res.json({ message: "contact deleted" });
@@ -116,13 +231,11 @@ app.delete("/api/contacts/:id", async (req, res) => {
   }
 });
 
-// Connect to MongoDB
 mongoose
   .connect("mongodb://mongo:27017/telegram_bot")
   .then(() => console.log("Connected to MongoDB"))
   .catch((e) => console.error("Mongo connection error:", e));
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

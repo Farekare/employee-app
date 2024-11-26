@@ -4,8 +4,7 @@ const API_LINK = "https://rat-cuddly-mostly.ngrok-free.app" + "/api";
 
 async function fetchContacts(payload) {
   try {
-    const chatId = window.Telegram.WebApp.initDataUnsafe.user.id;
-    payload.chatId = payload;
+    
     const response = await axios.post(API_LINK + "/fetch-contacts", payload);
     console.log("Contacts fetched:", response.data);
     return response.data;

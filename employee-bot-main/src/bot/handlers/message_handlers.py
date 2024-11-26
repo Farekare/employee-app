@@ -13,6 +13,8 @@ load_dotenv()
 # message router used with main dispatcher
 message_router = Router()
 
+
+
 # /start command handler in private messages
 @message_router.message(F.chat.type == 'private', CommandStart())
 async def command_start_handler(message: Message, state:FSMContext):
@@ -34,6 +36,7 @@ async def handle_password(message:Message, state:FSMContext):
 async def csv_export_handler(message: Message):
     await message.answer('Contacts list in csv format:')
     csv_string = await make_csv_string()
+
     input_file = types.BufferedInputFile(csv_string,'contacts.csv')
     await message.answer_document(input_file)
-    
+
