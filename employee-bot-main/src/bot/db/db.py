@@ -1,5 +1,5 @@
 from motor.motor_asyncio import AsyncIOMotorClient
-
+from typing import List
 
 class MongoClient():
     def __init__(self, db_uri, db_name='', collection_name=''):
@@ -13,6 +13,10 @@ class MongoClient():
 
     async def add_data(self, data: dict):
         await self._collection.insert_one(data)
+
+    async def add_data_list(self, data: List[dict]):
+        await self._collection.insert_many(data)
+
 
     async def get_data(self):
         cursor = self._collection.find({}, {"_id": 0, "__v": 0 })

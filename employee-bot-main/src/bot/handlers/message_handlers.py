@@ -5,9 +5,10 @@ from aiogram import types
 from keyboards.miniapps_keyboards import addEmployeeKeyboard
 from os import getenv
 from dotenv import load_dotenv
-from .handler_utils import make_csv_string
+from .handler_utils import make_csv_string, make_dicts_from_csv
 from .fsm import FSM
 from aiogram.fsm.context import FSMContext
+from io import BytesIO
 
 load_dotenv()
 # message router used with main dispatcher
@@ -40,3 +41,25 @@ async def csv_export_handler(message: Message):
     input_file = types.BufferedInputFile(csv_string,'contacts.csv')
     await message.answer_document(input_file)
 
+@message_router.message(FSM.authorized, Command("import"))
+async def csv_import_handler(message: Message, state: FSMContext):
+    await state.set_state(FSM.import_csv)
+    await message.answer("Send csv file to import:")
+
+@message_router.message(FSM.import_csv)
+async def file_handler(message: Message, state: FSMContext):
+    if not message.document:
+        await message.answer("Please send csv file")
+    if not message.document.file_name.endswith(".csv"):
+        await message.answer("Please send file in csv format")
+    else:
+        file_id = message.document.file_id
+        fp = await message.bot.get_file(file_id)
+
+        file = await message.bot.download_file(fp.file_path)
+        buffer = BytesIO(file.read())
+        buffer.seek(0)
+        await make_dicts_from_csv(buffer)
+    await state.set_state(FSM.authorized)
+    await message.answer("Test")
+    
