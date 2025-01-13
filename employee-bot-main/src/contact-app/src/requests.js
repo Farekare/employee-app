@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_LINK = "https://rat-cuddly-mostly.ngrok-free.app" + "/api";
+const API_LINK = "https://jointly-bright-swine.ngrok-free.app" + "/api";
 
 async function fetchContacts(payload) {
   try {

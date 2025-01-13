@@ -1,7 +1,7 @@
 version: "2"
-authtoken: 2cKbCBvKYxU1ZGeG5wpxOqEWXte_ym5uVQeFhZCdF8aNmWVE
+authtoken: 2rZb63lqNYCs01T1Xcu0yIxU2Ji_u1otuq7YAyKshCyFfCkY
 tunnels:
   backend:
     proto: http
     addr: backend:4000
-    domain: opossum-wealthy-minnow.ngrok-free.app
+    domain: jointly-bright-swine.ngrok-free.app
