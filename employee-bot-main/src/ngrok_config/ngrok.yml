@@ -4,4 +4,4 @@ tunnels:
   backend:
     proto: http
     addr: backend:4000
-    domain: rat-cuddly-mostly.ngrok-free.app
+    domain: opossum-wealthy-minnow.ngrok-free.app
