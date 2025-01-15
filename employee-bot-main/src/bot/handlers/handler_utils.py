@@ -31,7 +31,7 @@ async def make_csv_string():
 async def make_dicts_from_csv(buffer: io.BytesIO) -> List[Dict[str, str]]:
     text_data = io.TextIOWrapper(buffer, encoding='utf-8')
     
-    fields = ['name', 'email', 'region', 'tags', 'notes']
+    fields = ['name', 'email', 'tags', 'notes', 'region']
     
     try:
         reader = csv.DictReader(text_data, fieldnames=fields)
@@ -42,6 +42,7 @@ async def make_dicts_from_csv(buffer: io.BytesIO) -> List[Dict[str, str]]:
         for row in reader:
             row['tags'] = row['tags'].split(';') if row['tags'] else []
             dicts.append(row)
+        print(dicts)
         client = MongoClient(getenv('DB_URI'),'telegram_bot', 'users')
         await client.add_data_list(dicts)
     

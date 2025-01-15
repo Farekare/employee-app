@@ -49,8 +49,10 @@ async def csv_import_handler(message: Message, state: FSMContext):
 @message_router.message(FSM.import_csv)
 async def file_handler(message: Message, state: FSMContext):
     if not message.document:
+        await state.set_state(FSM.authorized)
         await message.answer("Please send csv file")
     if not message.document.file_name.endswith(".csv"):
+        await state.set_state(FSM.authorized)
         await message.answer("Please send file in csv format")
     else:
         file_id = message.document.file_id
@@ -61,5 +63,5 @@ async def file_handler(message: Message, state: FSMContext):
         buffer.seek(0)
         await make_dicts_from_csv(buffer)
     await state.set_state(FSM.authorized)
-    await message.answer("Test")
+    await message.answer("Contacts imported successfully")
     
