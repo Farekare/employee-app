@@ -12,7 +12,7 @@ async def get_contacts():
     return data
 
 def make_csv_buffer(data):
-    fields = ['name', 'email', 'region', 'tags', 'notes']
+    fields = ['name', 'email', 'tags', 'notes', 'region']
     csv_buffer = io.StringIO()
     writer = csv.DictWriter(csv_buffer, fieldnames=fields)
     writer.writeheader()
@@ -30,22 +30,21 @@ async def make_csv_string():
 
 async def make_dicts_from_csv(buffer: io.BytesIO) -> List[Dict[str, str]]:
     text_data = io.TextIOWrapper(buffer, encoding='utf-8')
-    
     fields = ['name', 'email', 'tags', 'notes', 'region']
     
     try:
         reader = csv.DictReader(text_data, fieldnames=fields)
-        
-        next(reader, None)  
-        
+        next(reader, None)
         dicts = []
         for row in reader:
-            row['tags'] = row['tags'].split(';') if row['tags'] else []
+            tags_string = row['tags'].strip() if row['tags'] else ''
+            row['tags'] = [tag.strip() for tag in tags_string.split(',')] if tags_string else []
             dicts.append(row)
+        
         print(dicts)
         client = MongoClient(getenv('DB_URI'),'telegram_bot', 'users')
         await client.add_data_list(dicts)
-    
+        
     except Exception as e:
         print(f"Ошибка при обработке CSV: {str(e)}")
         return []

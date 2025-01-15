@@ -193,11 +193,14 @@ app.post("/api/fetch-contacts", async (req, res) => {
     let query = {};
     if (tags != undefined && tags.length > 0) {
       query.tags = { $all: tags };
+      console.log(query.tags)
     }
     if (region != undefined && region != "All" && region != "") {
       query.region = region;
     }
+    console.log(query)
     const users = await User.find(query);
+    console.log(users)
     res.status(200).send(users);
   } catch (e) {
     console.error("Error fetching contacts:", e);
