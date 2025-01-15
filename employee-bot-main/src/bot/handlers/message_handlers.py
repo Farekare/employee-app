@@ -51,9 +51,11 @@ async def file_handler(message: Message, state: FSMContext):
     if not message.document:
         await state.set_state(FSM.authorized)
         await message.answer("Please send csv file")
+        return
     if not message.document.file_name.endswith(".csv"):
         await state.set_state(FSM.authorized)
         await message.answer("Please send file in csv format")
+        return
     else:
         file_id = message.document.file_id
         fp = await message.bot.get_file(file_id)
