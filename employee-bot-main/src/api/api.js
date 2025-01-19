@@ -171,8 +171,8 @@ app.post("/api/insert-contact", async (req, res) => {
     );
     const ADMIN_ID= process.env.ADMIN_ID;
     console.log(ADMIN_ID)
-    // Проверяем, достигли ли мы 10 вставок
-    if (counter.count % 10 === 0) {
+    // Проверяем, достигли ли мы 5 вставок
+    if (counter.count % 5 === 0) {
       // Отправляем уведомление и CSV
       await notifyTelegramBot(ADMIN_ID);
     }
