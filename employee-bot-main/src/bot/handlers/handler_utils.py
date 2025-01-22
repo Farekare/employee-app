@@ -7,7 +7,7 @@ import io
 load_dotenv()
 
 async def get_contacts():
-    client = MongoClient(getenv('DB_URI'),'telegram_bot', 'users')
+    client = MongoClient(getenv('DB_URI'),'test', 'users')
     data = await client.get_data()
     return data
 
@@ -42,7 +42,7 @@ async def make_dicts_from_csv(buffer: io.BytesIO) -> List[Dict[str, str]]:
             dicts.append(row)
         
         print(dicts)
-        client = MongoClient(getenv('DB_URI'),'telegram_bot', 'users')
+        client = MongoClient(getenv('DB_URI'),'test', 'users')
         await client.add_data_list(dicts)
         
     except Exception as e:
