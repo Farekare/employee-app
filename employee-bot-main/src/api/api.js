@@ -235,7 +235,7 @@ app.delete("/api/contacts/:id", async (req, res) => {
 });
 
 mongoose
-  .connect("mongodb://mongo:27017/telegram_bot")
+  .connect(process.env.DB_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((e) => console.error("Mongo connection error:", e));
 

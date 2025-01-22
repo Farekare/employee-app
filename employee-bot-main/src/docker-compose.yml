@@ -4,22 +4,22 @@ services:
   bot:
     build: ./bot
     env_file: .env
-    depends_on:
-      - mongo
+    # depends_on:
+    #   - mongo
   
   backend:
     build: ./api
     env_file: .env
-    depends_on:
-      - mongo
+    # depends_on:
+    #   - mongo
   
-  mongo:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: mongodb
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo_data:/data/db
   ngrok:
     build: ./ngrok_config
     depends_on:
