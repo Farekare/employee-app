@@ -12,6 +12,10 @@ services:
     env_file: .env
     # depends_on:
     #   - mongo
+    ports:
+      - "4000:4000"
+
+
   
   # mongo:
   #   image: mongo:latest
@@ -20,11 +24,11 @@ services:
   #     - "27017:27017"
   #   volumes:
   #     - mongo_data:/data/db
-  ngrok:
-    build: ./ngrok_config
-    depends_on:
-      - backend
-    ports:
-      - "4040:4040"
+  # ngrok:
+  #   build: ./ngrok_config
+  #   depends_on:
+  #     - backend
+  #   ports:
+  #     - "4040:4040"
 volumes:
   mongo_data:
