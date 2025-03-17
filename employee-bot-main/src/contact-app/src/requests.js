@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_LINK = "http://teamlistinfo.site" + "/api";
+const API_LINK = "https://teamlistinfo.site" + "/api";
 
 async function fetchContacts(payload) {
   try {
